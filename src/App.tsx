@@ -1,17 +1,28 @@
 import './App.css'
 import Profile from "./components/Profile/Index.tsx";
-import {Route, Routes} from "react-router";
+import { Route, Routes} from "react-router";
 import Guest from "./components/Guest";
+import UserSafety from "./utils/UserSafety.tsx";
 
 function App() {
 
-    return (
+    const token = ''
 
+    return (token?
 
-        <Routes>
-            <Route path='/' element={<Guest/>}/>
+        (<Routes>
             <Route path='/profile' element={<Profile/>}/>
-        </Routes>
+         <Route element={<UserSafety token={token}/>}>
+             <Route path='/' element={<Guest/>}/>
+         </Route>
+        </Routes>)
+            :(<Routes>
+                <Route path='/' element={<Guest/>}/>
+                <Route element={<UserSafety token={token}/>}>
+                    <Route path='/profile' element={<Profile/>}/>
+                </Route>
+            </Routes>)
+
 
 
 

@@ -2,28 +2,20 @@ import './App.css'
 import Profile from "./components/Profile/Index.tsx";
 import { Route, Routes} from "react-router";
 import Guest from "./components/Guest";
-import UserSafety from "./utils/UserSafety.tsx";
+import {Navigate} from "react-router-dom";
 
 function App() {
 
-    const token = ''
+    const token = 'sfds'
 
-    return (token?
+    return (
 
-        (<Routes>
-            <Route path='/profile' element={<Profile/>}/>
-         <Route element={<UserSafety token={token}/>}>
-             <Route path='/' element={<Guest/>}/>
-         </Route>
-        </Routes>)
-            :(<Routes>
-                <Route path='/' element={<Guest/>}/>
-                <Route element={<UserSafety token={token}/>}>
-                    <Route path='/profile' element={<Profile/>}/>
-                </Route>
-            </Routes>)
+        <Routes>
+            <Route path='/profile' element={token?<Profile/>:<Navigate to={'/'} replace/>}/>
 
+             <Route path='/' element={token?<Navigate to={'/profile'}/>:<Guest/>}/>
 
+        </Routes>
 
 
     )

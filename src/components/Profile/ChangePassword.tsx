@@ -10,9 +10,17 @@ const ChangePassword = ({close}:EditProfileProps) => {
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleClickSave = () => {
-        // TODO: Implement change password save and close logic
-        alert('Password changed!');
-        close()
+        if(newPassword === confirmPassword) {
+            // TODO: Implement change password save and close logic
+            alert('Password changed!');
+            close()
+        }else{
+            alert('Password do not match!');
+        }
+
+
+
+
 
     }
 

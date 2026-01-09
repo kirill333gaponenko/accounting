@@ -1,4 +1,6 @@
 import {useState} from "react";
+import {useAppDispatch} from "../../app/hooks.ts";
+import {changePassword} from "../../features/api/accountingApi.ts";
 
 type EditProfileProps ={
     close:() => void;
@@ -8,11 +10,11 @@ const ChangePassword = ({close}:EditProfileProps) => {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const dispatch = useAppDispatch();
 
     const handleClickSave = () => {
         if(newPassword === confirmPassword) {
-            // TODO: Implement change password save and close logic
-            alert('Password changed!');
+            dispatch(changePassword({newPassword,oldPassword}));
             close()
         }else{
             alert('Password do not match!');

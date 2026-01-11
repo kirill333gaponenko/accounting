@@ -1,6 +1,8 @@
 import {useState} from "react";
-import {useAppDispatch} from "../../app/hooks.ts";
-import {changePassword} from "../../features/api/accountingApi.ts";
+import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
+import {useChangePasswordMutation, useFetchUserQuery} from "../../features/api/accountingApi.ts";
+import {createToken} from "../../utils/constants.ts";
+import {setToken} from "../../features/token/tokenSlice.ts";
 
 type EditProfileProps ={
     close:() => void;
@@ -11,10 +13,24 @@ const ChangePassword = ({close}:EditProfileProps) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const dispatch = useAppDispatch();
+    const [changePassword] = useChangePasswordMutation()
+    const token = useAppSelector(state =>state.token)
+    const {data:userData} = useFetchUserQuery(token)
 
-    const handleClickSave = () => {
+    const handleClickSave = async () => {
         if(newPassword === confirmPassword) {
-            dispatch(changePassword({newPassword,oldPassword}));
+            const token = createToken(userData!.login,oldPassword)
+            try{
+                const {error} = await changePassword({ newPassword,token});
+                if(error){
+                    console.log('password update error', error)
+                }else{
+                    dispatch(setToken(createToken(userData!.login,newPassword)));
+                }
+            }catch(e){
+                console.log('error', e);
+            }
+
             close()
         }else{
             alert('Password do not match!');
